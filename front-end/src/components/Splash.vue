@@ -79,7 +79,7 @@ export default {
       response: {},
       email: "",
       subscribed: false,
-      message1: "Join our mailing list to stay in the loop:",
+      message1: "While we build the site, join our mailing list to stay in the loop:",
       message2: "Great! A confirmation email is on the way."
     }
   },
