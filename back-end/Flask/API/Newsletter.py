@@ -32,6 +32,9 @@ class Newsletter():
 		except mailchimp.ListAlreadySubscribedError:
 			dict_local["code"] = 50
 			pass
+		except mailchimp.Error:
+			dict_local["code"] = 55
+			pass
 		
 		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
 		return return_string 

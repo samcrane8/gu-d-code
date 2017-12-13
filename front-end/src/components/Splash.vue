@@ -99,6 +99,9 @@ export default {
           } else if (response.data.code == 31) {
             this.message1="Not a vaild email. Try again."
             this.email = ""
+          } else if (response.data.code == 55) {
+            this.message1="Too many recent signup requests for this email."
+            this.email = ""
           }
         })
         .catch(error => {
