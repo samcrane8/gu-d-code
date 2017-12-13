@@ -10,8 +10,8 @@ app = Flask('SarOS Back-End')
 
 # app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ubuntu:elephants_remember_1984@localhost/jacki_harding'
 CORS(app)
-db = SQLAlchemy(app)
+db = None
+# db = SQLAlchemy(app)
 
-db.create_all()
+# db.create_all()
