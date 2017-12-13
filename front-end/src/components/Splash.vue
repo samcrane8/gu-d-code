@@ -80,25 +80,29 @@ export default {
       email: "",
       subscribed: false,
       message1: "Join our mailing list to stay in the loop:",
-      message2: "Thanks! A confirmation email is on the way."
+      message2: "Great! A confirmation email is on the way."
     }
   },
   methods: {
     join: function() {
       var url = "http://gudlinens.com:5000/add_to_newsletter"
       const vm = this;
-      this.subscribed = true;
       var body = { 'email': this.email}
       axios.post(url, body)
         .then((response) => {
           if (response.data.code == 200) {
             this.email = ""
-          } else {
-            this.message2="This email is already subscribed!"
+            this.subscribed = true;
+          } else if (response.data.code == 50) {
+            this.message2="This email is already subscribed."
+            this.subscribed = true;
+          } else if (response.data.code == 31) {
+            this.message1="Not a vaild email. Try again."
+            this.email = ""
           }
         })
         .catch(error => {
-          this.message2="This email is already subscribed!"
+          this.message2="Something went wrong with the server... we're working on it!"
       });
     }
   },
