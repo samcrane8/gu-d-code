@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     join: function() {
-      var url = "http://gudlinens.com:5000/add_to_newsletter"
+      var url = "http://gudlinens.com:5001/add_to_newsletter"
       const vm = this;
       var body = { 'email': this.email}
       axios.post(url, body)
