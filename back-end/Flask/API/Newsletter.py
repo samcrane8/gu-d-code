@@ -7,6 +7,7 @@ from flask import request, Response, send_file, send_from_directory, make_respon
 from sqlalchemy.dialects.postgresql import JSON
 import datetime
 import mailchimp
+from mailchimp import ListAlreadySubscribedError
 
 API_KEY = "94a8d8be7ab3ccea22c02040be37a978-us17"
 LIST_ID = 'df86122232' 
@@ -22,9 +23,16 @@ class Newsletter():
 
 		email = parsed_json["email"]
 
-		api.lists.subscribe(LIST_ID, {'email': email})
-		
 		dict_local = {'code': 200}
+		try:
+			api.lists.subscribe(LIST_ID, {'email': email})
+		except mailchimp.ValidationError:
+			dict_local["code"] = 31
+			pass
+		except mailchimp.ListAlreadySubscribedError:
+			dict_local["code"] = 50
+			pass
+		
 		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
 		return return_string 
 
