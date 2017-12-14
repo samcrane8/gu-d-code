@@ -11,7 +11,7 @@
                       GÜDLINENS
                   </h3>
                   <h6 class="text-xs-center" style="font-size:15px;">
-                    Luxury, ethically-sourced linens that don't kill your wallet.
+                    Luxury, ethically-sourced linens that don't break the bank.
                   </h6>
                 </v-layout>
               </v-card-title>
@@ -79,7 +79,7 @@ export default {
       response: {},
       email: "",
       subscribed: false,
-      message1: "While we build the site, join our mailing list to stay in the loop:",
+      message1: "Join our mailing list to stay in the loop while we’re building our site.",
       message2: "Great! A confirmation email is on the way."
     }
   },
