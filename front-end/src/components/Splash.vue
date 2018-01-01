@@ -33,6 +33,8 @@
                   />
                   <v-flex class="text-xs-center">
                     <v-btn v-if="!subscribed" outline style="border-radius:0px;background-color:#f4b061;"type="submit" @click.prevent = "join">JOIN</v-btn>
+                    or
+                    <v-btn v-if="!subscribed" outline style="border-radius:0px;background-color:#f4b061;"type="submit" @click.prevent = "enter">ENTER SITE</v-btn>
                   </v-flex>
                 </v-layout>
               </v-card-title>
@@ -107,6 +109,10 @@ export default {
         .catch(error => {
           this.message2="Something went wrong with the server... we're working on it!"
       });
+    },
+    enter: function() {
+      router.push("/shop")
+      this.$emit('set_toolbar', true)
     }
   },
   computed: {
@@ -118,16 +124,18 @@ export default {
       }
       return binding
     }
+  },
+  onMount(){
+    this.$emit('set_toolbar', false)
   }
 }
 </script>
 
 <style>
-@import url(https://fonts.googleapis.com/css?family=Barlow);
-main {
-  background: url("/static/results.jpg") no-repeat fixed left center;
-  background-size: cover;
-  font-family: 'Barlow', sans-serif;
-}
-
+  @import url(https://fonts.googleapis.com/css?family=Barlow);
+  main {
+    background: url("/static/results.jpg") no-repeat fixed left center;
+    background-size: cover;
+    font-family: 'Barlow', sans-serif;
+  }
 </style>

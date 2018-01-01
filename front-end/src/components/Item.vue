@@ -1,24 +1,45 @@
 <template>
-  <div class="card-container" v-on:click="add_one">
-    <div class="card">
-      <div class="side"><img src="https://cdn.shopify.com/s/files/1/0951/7126/products/classic-hardcore-bundle_solid-white_silo_900x.jpg?v=1509636930" v-bind="{width: _width}" alt="Jimmy Eat World"></div>
-      quantity = {{this.quantity}}<br>
-      <span v-if="flipped">flipped</span>
-      <span v-else>not flipped</span>
-    </div>
-  </div>
+  <v-card flat style="margin: 12px; background-color:white;" class="text-xs-left">
+    <v-card-title>
+    </v-card-title>
+    <v-card-media src="static/PBD_Linens-58.jpg" height="200px"  v-on:click="something">
+    </v-card-media>
+    <v-layout row>
+      <v-flex>
+        {{item_info.title}}
+      </v-flex>
+      <v-spacer/>
+      <v-flex class="text-xs-right">
+        price: ${{item_info.price}}
+      </v-flex>
+    </v-layout>
+    <v-layout row class="text-xs-center">
+      <v-flex>
+        <v-btn flat v-on:click="remove_one" :disabled="quantity==0">
+          <v-icon color="black">remove</v-icon>
+        </v-btn>
+        {{quantity}}
+        <v-btn flat v-on:click="add_one" :disabled="quantity==item_info.max_qty">
+          <v-icon color="black">add</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-layout>
+  </v-card>
 </template>
 
 <script>
+import router from '@/router'
+
 export default {
   props: {
-    Title: String,
+    item_info: {
+      type: Object,
+      default: {
+        title: "default title"
+      }
+    },
     closeAction: Function,
-    containerClass: String,
-    _width: {
-      type: String,
-      default: '250px'
-    }
+    containerClass: String
   },
   data() {
     return {
@@ -35,31 +56,13 @@ export default {
       if (this.quantity > 0){
         this.quantity -= 1;
       }
+    },
+    goto_item_page(item) {
+
+    },
+    something() {
+      router.push('about')
     }
   }
 }
 </script>
-
-<style type="text/css">
-
-  body {
-    font: 600 14px/24px "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Sans-Serif;
-    margin: 12px 0;
-  }
-  .card-container {
-    margin: 10px;
-    cursor: pointer;
-    height: 250px;
-    perspective: 600;
-    position: relative;
-    width: 250px;
-  }
-  .card {
-    height: 100%;
-    position: absolute;
-    transform-style: preserve-3d;
-    transition: all 1s ease-in-out;
-    width: 100%;
-  }
-
-</style>
