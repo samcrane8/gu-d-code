@@ -1,31 +1,34 @@
 <template>
-  <v-card flat style="margin: 12px; background-color:white;" class="text-xs-left">
-    <v-card-title>
-    </v-card-title>
-    <v-card-media src="static/PBD_Linens-58.jpg" height="200px"  v-on:click="something">
-    </v-card-media>
-    <v-layout row>
+  <v-card flat style="margin: 12px; background-color:white;" class="text-xs-center" width="250px">
+    <v-layout column class="text-xs-left">
       <v-flex>
-        {{item_info.title}}
+        <img :src="item_info.image" height="250px" width="250px">
+        </img>
+        <v-layout row>
+        <span class="text-xs-left">
+          {{item_info.name}}
+        </span>
+        <span class="text-xs-right">
+          ${{item_info.price}}
+        </span>
+      </v-layout>
       </v-flex>
-      <v-spacer/>
-      <v-flex class="text-xs-right">
-        price: ${{item_info.price}}
-      </v-flex>
-    </v-layout>
-    <v-layout row class="text-xs-center">
-      <v-flex>
-        <v-btn flat v-on:click="remove_one" :disabled="quantity==0">
-          <v-icon color="black">remove</v-icon>
-        </v-btn>
-        {{quantity}}
-        <v-btn flat v-on:click="add_one" :disabled="quantity==item_info.max_qty">
-          <v-icon color="black">add</v-icon>
-        </v-btn>
-      </v-flex>
+      
+      <!-- <v-layout row class="text-xs-center">
+        <v-flex>
+          <v-btn flat v-on:click="remove_one" :disabled="quantity==0">
+            <v-icon color="black">remove</v-icon>
+          </v-btn>
+          {{quantity}}
+          <v-btn flat v-on:click="add_one" :disabled="quantity==item_info.max_qty">
+            <v-icon color="black">add</v-icon>
+          </v-btn>
+        </v-flex>
+      </v-layout>-->
     </v-layout>
   </v-card>
 </template>
+
 
 <script>
 import router from '@/router'
@@ -35,7 +38,7 @@ export default {
     item_info: {
       type: Object,
       default: {
-        title: "default title"
+        name: "default title"
       }
     },
     closeAction: Function,

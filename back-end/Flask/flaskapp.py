@@ -7,11 +7,10 @@ from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask('SarOS Back-End')
-
+CORS(app)
 # app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-CORS(app)
-db = None
-# db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ubuntu:elephants_remember_1984@localhost/gudlinens'
+db = SQLAlchemy(app)
 
 # db.create_all()
