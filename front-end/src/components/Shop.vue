@@ -1,5 +1,5 @@
 <template>
-  <main class="text-xs-center">
+  <main class="text-xs-center" style="margin-top:70px;">
     <!-- <section>
       <v-layout
             column
@@ -10,15 +10,22 @@
         <img src="/static/PBD_LinensPeople-34.jpg" alt="Linen Model" width="100%">
       </v-layout>
     </section> -->
-    <section>
-      <v-layout wrap class="text-xs-center">
-        <v-flex 
-          v-for="item in items"
-          :key = item.color>
-          <v-item :item_info = item> </v-item>
-          <v-spacer/>
-        </v-flex>
-      </v-layout>
+    <section style="margin-left:30px;margin-right:30px;">
+      <v-flex 
+        v-for="(item,key) in items"
+        :key = key
+        class="text-xs-left">
+        <h6>{{key}}</h6>
+        <v-layout wrap class="text-xs-left">
+          <v-flex
+            v-for="product in item"
+            :key = key
+            class="text-xs-left">
+            <v-item :item_info = product> </v-item>
+            <v-spacer/>
+          </v-flex>
+        </v-layout>
+      </v-flex>
     </section>
   </main>
 </template>
@@ -45,16 +52,18 @@ export default {
   },
   data () {
     return {
-      items: [
-        {
-          id: 1,
-          name: "DUMMY PRODUCT",
-          image: "static/PBD_Linens-58.jpg",
-          price: "95",
-          max_qty: 20,
-          color: "white"
-        }
-      ]
+      items: {
+        "DUMMY PRODUCT": [
+          {
+            id: 1,
+            name: "DUMMY PRODUCT",
+            image: "static/PBD_Linens-58.jpg",
+            price: "95",
+            max_qty: 20,
+            color: "white"
+          }
+        ]
+      }
     }
   },
   methods : {

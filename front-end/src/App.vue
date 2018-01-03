@@ -1,5 +1,16 @@
 <template>
   <v-app style="background-color:white; margin-top: 0px; font-family: 'Barlow', sans-serif;">
+    <v-navigation-drawer temporary v-model="sidebar" absolute>
+      <v-list>
+        <v-list-tile
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path"
+          :color="item.color">
+          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
     <v-toolbar fixed flat color="white">
       <span class="hidden-sm-and-up">
         <v-toolbar-side-icon @click.stop="sidebar = !sidebar">
@@ -67,6 +78,9 @@ import router from '@/router'
         toolbar: false,
         menuItems: [
           { title: 'CART', path: '/cart', icon: 'face', color: "transparent"},
+        ],
+        cart: [
+          { name: 'CLASSIC SET', color: 'White', qty: 1}
         ]
       }
     },

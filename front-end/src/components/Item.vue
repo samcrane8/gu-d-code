@@ -1,17 +1,20 @@
 <template>
   <v-card flat style="margin: 12px; background-color:white;" class="text-xs-center" width="250px">
-    <v-layout column class="text-xs-left">
+    <v-layout column align-center>
       <v-flex>
-        <img :src="item_info.image" height="250px" width="250px">
+        <img :src="item_info.image" :height="side" :width="side"  style="width:250px;cursor:pointer" v-on:click="goto_item">
         </img>
         <v-layout row>
-        <span class="text-xs-left">
-          {{item_info.name}}
-        </span>
-        <span class="text-xs-right">
-          ${{item_info.price}}
-        </span>
-      </v-layout>
+          <v-flex class="text-xs-left">
+            {{item_info.name}}
+          </v-flex>
+          <v-flex class="text-xs-right">
+            ${{item_info.price}}
+          </v-flex>
+        </v-layout>
+        <v-flex style="color:#747677" class="text-xs-left">
+          {{item_info.color}}
+        </v-flex>
       </v-flex>
       
       <!-- <v-layout row class="text-xs-center">
@@ -38,7 +41,8 @@ export default {
     item_info: {
       type: Object,
       default: {
-        name: "default title"
+        name: "default title",
+        color: "default color"
       }
     },
     closeAction: Function,
@@ -47,7 +51,8 @@ export default {
   data() {
     return {
       quantity: 0,
-      flipped: false
+      flipped: false,
+      side: '250px'
     }
   } ,
   methods: {
@@ -60,11 +65,8 @@ export default {
         this.quantity -= 1;
       }
     },
-    goto_item_page(item) {
-
-    },
-    something() {
-      router.push('about')
+    goto_item() {
+      router.push('product?name='+this.item_info.name+'&color='+this.item_info.color)
     }
   }
 }
