@@ -35,7 +35,7 @@
     </v-toolbar>
     <main style="background-color:#ffffff; margin-top: 0px; margin-bottom: 50px;">
       <v-container pa-0 fluid>
-        <router-view v-on:set_toolbar="set_toolbar"></router-view>
+        <router-view v-on:set_toolbar="set_toolbar" v-on:add_to_cart="add_to_cart"></router-view>
       </v-container>
     </main>
     <span style="background-color:white;">
@@ -68,7 +68,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import router from '@/router'
+
+Vue.use(VueAxios, axios)
 
   export default {
     data () {
@@ -93,6 +98,10 @@ import router from '@/router'
       },
       goto_external(loc){
         window.location.href = loc
+      },
+      add_to_cart(new_item){
+        alert(JSON.stringify(new_item))
+
       }
     }
   }

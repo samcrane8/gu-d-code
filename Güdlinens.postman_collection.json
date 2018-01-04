@@ -1,0 +1,254 @@
+{
+	"info": {
+		"name": "Güdlinens",
+		"_postman_id": "d405d1eb-6924-c28f-e70b-1ea310800e6f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Email to Newsletter",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "yah",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "94a8d8be7ab3ccea22c02040be37a978-us17",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email_address\": \"scrane31@gatech.edu\",\n\t\"status\": \"subscribed\"\n}"
+				},
+				"url": {
+					"raw": "https://us17.api.mailchimp.com/3.0/lists/df86122232/members/",
+					"protocol": "https",
+					"host": [
+						"us17",
+						"api",
+						"mailchimp",
+						"com"
+					],
+					"path": [
+						"3.0",
+						"lists",
+						"df86122232",
+						"members",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Test Mailchimp Connection",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "94a8d8be7ab3ccea22c02040be37a978-us17",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://us17.api.mailchimp.com/3.0/",
+					"protocol": "https",
+					"host": [
+						"us17",
+						"api",
+						"mailchimp",
+						"com"
+					],
+					"path": [
+						"3.0",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add To Newsletter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"samcrane8@gmail.com\"\n}"
+				},
+				"url": {
+					"raw": "gudlinens.com:5001/add_to_newsletter",
+					"host": [
+						"gudlinens",
+						"com"
+					],
+					"port": "5001",
+					"path": [
+						"add_to_newsletter"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5001/get_products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"get_products"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Info",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"CLASSIC SET\",\n\t\"color\": \"Navy Dot\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5001/get_product_info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"get_product_info"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"PREMIER SET\",\n\t\"color\": \"Navy Dot\",\n\t\"stock\": 20,\n\t\"price\": \"145.00\",\n\t\"primary_image\": \"https://s3.amazonaws.com/gudlinens/PBD_Linens-53.jpg\",\n\t\"description\": \"The original Güdlinen sheet set in our lightweight cotton percale weave. Woven from 100% long-staple cotton, Classic sheets are crisp, airy and cool, for the ultimate night’s sleep. Core Sheet Sets include a flat sheet, fitted sheet, and 2 pillowcases.\",\n\t\"details\": \"Includes a Flat Sheet, Fitted Sheet and 2 pillowcases.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5001/add_product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"add_product"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"PREMIER SET\",\n\t\"color\": \"Navy Dot\",\n\t\"new_values\": {\n\t\t\"stock\": 20,\n\t\t\"price\": 135.00,\n\t\t\"primary_image\": \"https://s3.amazonaws.com/gudlinens/PBD_Linens-53.jpg\",\n\t\t\"description\": \"The original Güdlinen sheet set in our lightweight cotton percale weave. Woven from 100% long-staple cotton, Classic sheets are crisp, airy and cool, for the ultimate night’s sleep. Core Sheet Sets include a flat sheet, fitted sheet, and 2 pillowcases.\",\n\t\t\"details\": \"Includes a Flat Sheet, Fitted Sheet, a comforter and 4 pillowcases.\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5001/edit_product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"edit_product"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

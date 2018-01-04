@@ -48,7 +48,7 @@
 					<h5>PRICE: ${{product_info.price}}</h5>
 				</v-flex> -->
 				<v-flex fluid class="text-xs-center">
-					<v-btn flat outline v-on:click="add_to_bag"> ADD TO CART </v-btn>
+					<v-btn style="border-radius:0px" flat outline v-on:click="add_to_cart"> ADD TO CART </v-btn>
 				</v-flex>
 			</v-layout>
 		</v-layout>
@@ -96,8 +96,9 @@ export default {
             alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
         });
     },
-    add_to_bag() {
-    	alert('adding to bag!')
+    add_to_cart() {
+    	var new_item = {'name': this.name, 'color': this.color, qty: 1}
+    	this.$emit('add_to_cart', new_item)
   	}
   },
 	beforeMount() {

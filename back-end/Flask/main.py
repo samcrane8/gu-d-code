@@ -6,6 +6,7 @@ from flaskapp import app, db
 
 from API.Newsletter import Newsletter
 from API.Shop import Shop
+from API.User import User
 
 #db.drop_all()
 db.create_all()
