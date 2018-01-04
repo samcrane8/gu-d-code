@@ -3,7 +3,8 @@ import uuid
 from Utility.Encryptor import Encryptor
 from Utility.color_print import ColorPrint
 from flaskapp import db, app
-from flask import request, Response, send_file, send_from_directory, make_response
+from flask import request, Response, send_file, send_from_directory, make_response, session
+from sqlalchemy import tuple_
 from sqlalchemy.dialects.postgresql import JSON
 import datetime
 
@@ -15,18 +16,81 @@ class Shop():
 
 	@staticmethod
 	def add_to_cart():
-		parsed_json = request.get_json()
+		new_items = request.get_json()
+		ColorPrint.print_message('Debug', '/add_to_cart', 'Add to cart.')
+
+		if 'cart' not in session.keys():
+			#there's no cart yet
+			ColorPrint.print_message('Debug', '/add_to_cart', 'Cart was not in session.')
+			session['cart'] = []
+
+		cart = session['cart']
+
+		for new_item in new_items:
+			#iterate through new items
+			already_in_cart = False
+			for item in cart:
+				if new_item["name"] == item["name"] and new_item["color"] == item["color"]:
+					already_in_cart = True
+					item["quantity"] += new_item["quantity"]
+			if not already_in_cart:
+				cart += [{'name': new_item["name"], 'color': new_item["color"], 'quantity': new_item["quantity"]}]
+		session.modified = True
+		dict_local={'code':200}
+		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+		return return_string
+
+
+	@staticmethod
+	def get_cart():
+		if 'cart' in session.keys():
+			cart = session['cart']
+		else:
+			cart = {}
+			return_string = json.dumps(cart, sort_keys=True, indent=4, separators=(',', ': '))
+			return return_string
+
+		item_tuples = []
+		for item in cart:
+			item_tuples += [(item["name"], item["color"])]
+
+		products = DB_Product.query.filter(tuple_(DB_Product.name, DB_Product.color).in_(item_tuples)).all()
+
+		arr_local = []
+
+		for product in products:
+			prod_dict = {}
+			prod_dict["name"] = product.name
+			prod_dict["image"] = product.primary_image
+			prod_dict["price"] = product.price
+			prod_dict["max_qty"] = product.stock
+			prod_dict["color"] = product.color
+
+			for item in cart:
+				if item["name"] == product.name and item["color"] == product.color:
+					prod_dict["quantity"] = item["quantity"]
+			
+			arr_local += [prod_dict]
+
+		return_string = json.dumps(arr_local, sort_keys=True, indent=4, separators=(',', ': '))
+		return return_string
+
+	@staticmethod
+	def get_cart_size():
+		if 'cart' in session.keys():
+			cart = len(session['cart'])
+		else:
+			cart = 0
+
+		return_string = json.dumps(cart, sort_keys=True, indent=4, separators=(',', ': '))
+		return return_string
 
 	@staticmethod
 	def add_product():
-		encrypted_cookie = request.cookies.get('sessionID')
-		if DB_User.authenticate_user_cookie(encrypted_cookie):
-			cookie = DB_User.decrypt_cookie(encrypted_cookie)
-			if cookie is None:
-				dict_local = {'code': 31, 'message': "auth error"}
-				return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
-				return return_string
-			if DB_User.query.filter_by(email = cookie["email"]).first().account_type == "admin":
+
+		if 'user' in session.keys():
+			user = session['user']
+			if DB_User.query.filter_by(email = user["email"]).first().account_type == "admin":
 				parsed_json = request.get_json()
 
 				name = parsed_json["name"]
@@ -138,4 +202,6 @@ app.add_url_rule('/get_products', 'get_products', Shop.get_products, methods=['G
 app.add_url_rule('/get_product_info', 'get_product_info', Shop.get_product_info, methods=['POST'])
 app.add_url_rule('/add_product', 'add_product', Shop.add_product, methods=['POST'])
 app.add_url_rule('/edit_product', 'edit_product', Shop.edit_product, methods=['POST'])
-
+app.add_url_rule('/get_cart', 'get_cart', Shop.get_cart, methods=['GET'])
+app.add_url_rule('/get_cart_size', 'get_cart_size', Shop.get_cart_size, methods=['GET'])
+app.add_url_rule('/add_to_cart', 'add_to_cart', Shop.add_to_cart, methods=['POST'])

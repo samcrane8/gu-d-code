@@ -3,7 +3,7 @@ import uuid
 from Utility.Encryptor import Encryptor
 from Utility.color_print import ColorPrint
 from flaskapp import db, app
-from flask import request, Response, send_file, send_from_directory, make_response
+from flask import request, Response, send_file, send_from_directory, make_response, session
 from sqlalchemy.dialects.postgresql import JSON
 from DBModel.DB_User import DB_User
 from DBModel.DB_Session import DB_Session
@@ -17,31 +17,20 @@ class User():
 
     @staticmethod
     def login():
-        encrypted_cookie = request.cookies.get('sessionID')
 
         parsed_json = request.get_json()
         email = parsed_json["email"]
         password = parsed_json["password"]
-        if DB_User.authenticate_user_cookie(encrypted_cookie):
-            #then we've already logged on.
-            dict_local = {'code': 200, 'message': "Already logged in."}
-            return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
-            return return_string 
-        elif DB_User.authenticate_email_password(email, password):
-            #then there's not a good cookie, and we're loggin in.
-            user = DB_User.query.filter_by(email = email).first();
-            id = uuid.uuid4()
-            session = DB_Session(id, str(request.remote_addr), user.email)
-            db.session.add(session)
-            db.session.commit()
 
-            jsonCookie = {'email' : user.email, 'password' : user.password, 'address': request.remote_addr}
-            cook_str = json.dumps(jsonCookie, sort_keys=True, indent=4, separators=(',', ': '))
-            encodedCookie = encryptor.encryptMessage(cook_str)
+        if DB_User.authenticate_email_password(email, password):
+            #then there's not a good cookie, and we're loggin in.
+
+            user = {'email' : email, 'password' : password}
+            session['user'] = user
+            session.modified=True
             dict_local = {'code': 200}
             return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
             response = make_response(return_string)  
-            response.set_cookie('sessionID',value=encodedCookie)
             return response
         else:
             #not a good cookie and no login.
@@ -52,37 +41,24 @@ class User():
 
     @staticmethod
     def logoff():
-        encrypted_cookie = request.cookies.get('sessionID')
-        if DB_User.authenticate_user_cookie(encrypted_cookie):
-            cookie = DB_User.decrypt_cookie(encrypted_cookie)
-            session = DB_Session.query.filter(DB_Session.email == cookie['email'], 
-                 DB_Session.closed_at == None).first()
-            if session is None:
-                dict_local = {'code': 31, 'message': "User not logged in anyways."}
-                return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
-                return return_string
-            else:
-                session.closed_at = datetime.datetime.now()
-                db.session.commit()
-                dict_local = {'code': 200}
-                return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
-                return return_string
-        else:
+        if 'user' not in session.keys():
             dict_local = {'code': 31, 'message': "User not logged in anyways."}
+            return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+            return return_string
+        else:
+            session.pop('user', None)
+            session.modified = True
+            dict_local = {'code': 200}
             return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
             return return_string
 
 
     @staticmethod
     def list_all_users():
-        encrypted_cookie = request.cookies.get('sessionID')
-        if DB_User.authenticate_user_cookie(encrypted_cookie):
-            cookie = DB_User.decrypt_cookie(encrypted_cookie)
-            if cookie is None:
-                dict_local = {'code': 31, 'message': "auth error"}
-                return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
-                return return_string
-            if DB_User.query.filter_by(email = cookie["email"]).first().account_type == "admin":
+
+        if 'user' in session.keys():
+            user = session['user']
+            if DB_User.query.filter_by(email = user.email).first().account_type == "admin":
                 db_user_devices = DB_User.query.all()
                 return_json_list = []
                 for report in db_user_devices:

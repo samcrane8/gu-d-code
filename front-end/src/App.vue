@@ -35,7 +35,7 @@
     </v-toolbar>
     <main style="background-color:#ffffff; margin-top: 0px; margin-bottom: 50px;">
       <v-container pa-0 fluid>
-        <router-view v-on:set_toolbar="set_toolbar" v-on:add_to_cart="add_to_cart"></router-view>
+        <router-view v-on:set_toolbar="set_toolbar"></router-view>
       </v-container>
     </main>
     <span style="background-color:white;">
@@ -98,10 +98,6 @@ Vue.use(VueAxios, axios)
       },
       goto_external(loc){
         window.location.href = loc
-      },
-      add_to_cart(new_item){
-        alert(JSON.stringify(new_item))
-
       }
     }
   }

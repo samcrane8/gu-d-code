@@ -1,8 +1,8 @@
 <template>
 	<v-layout wrap row style="margin-top: 50px;">
 		<v-layout column style="margin:25px;">
-			<v-flex class="text-xs-center">
-				<img :src="product_info.images[0]" width="300px" height="300px"/>
+			<v-flex class="text-xs-center" style="margin-top:50px;">
+				<img :src="product_info.images[0]" width="250px" height="250px"/>
 			</v-flex>
 		</v-layout>
 		<v-layout column style="width:300px;margin-left: 25px;margin-right:25px;">
@@ -47,9 +47,20 @@
 				<!-- <v-flex fluidclass="text-xs-left">
 					<h5>PRICE: ${{product_info.price}}</h5>
 				</v-flex> -->
-				<v-flex fluid class="text-xs-center">
-					<v-btn style="border-radius:0px" flat outline v-on:click="add_to_cart"> ADD TO CART </v-btn>
-				</v-flex>
+				<v-layout row class="text-xs-left" style="margin-right:30px;">
+					<v-flex>
+	          <v-btn flat v-on:click="remove_one" :disabled="quantity==0">
+	            <v-icon color="black">remove</v-icon>
+	          </v-btn>
+	          {{quantity}}
+	          <v-btn flat v-on:click="add_one" :disabled="quantity==this.max_qty">
+	            <v-icon color="black">add</v-icon>
+	          </v-btn>
+	        </v-flex>
+	        <v-flex>
+						<v-btn style="border-radius:0px" flat outline v-on:click="add_to_cart"> ADD TO CART </v-btn>
+					</v-flex>
+				</v-layout>
 			</v-layout>
 		</v-layout>
 	</v-layout>
@@ -71,6 +82,8 @@ export default {
 		return {
 			name: "",
 			color: "",
+			quantity: 1,
+			max_qty: 20,
 			items: ['Description', 'Details'],
       product_info: {
       	description: 'Loading...',
@@ -97,9 +110,24 @@ export default {
         });
     },
     add_to_cart() {
-    	var new_item = {'name': this.name, 'color': this.color, qty: 1}
-    	this.$emit('add_to_cart', new_item)
-  	}
+    	var body = [{'name': this.name, 'color': this.color, 'quantity': this.quantity}]
+    	var url = "http://0.0.0.0:5001/add_to_cart"
+      axios.post(url,body, {withCredentials:true})
+          .then((response) => {
+            alert('success!')
+          })
+          .catch(error => {
+            alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
+        });
+  	},
+  	add_one(event) {
+      this.quantity += 1;
+    },
+    remove_one(event) {
+      if (this.quantity > 0){
+        this.quantity -= 1;
+      }
+    }
   },
 	beforeMount() {
 		this.name = this.$route.query.name
