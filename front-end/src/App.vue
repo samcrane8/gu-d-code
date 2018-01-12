@@ -35,13 +35,13 @@
           flat
           :color="cart_tile.color"
           :to="cart_tile.path">
-          <span style="color:black;">{{ cart_tile.title }}({{cart_size}})</span>
+          <span style="color:black;">{{ cart_tile.title }}({{this.cart_size}})</span>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main style="background-color:#ffffff; margin-top: 0px; margin-bottom: 50px;">
       <v-container pa-0 fluid>
-        <router-view v-on:set_toolbar="set_toolbar"></router-view>
+        <router-view v-on:set_toolbar="set_toolbar" v-on:cart_change="get_cart_size"></router-view>
       </v-container>
     </main>
     <span style="background-color:white;">
@@ -87,7 +87,7 @@ Vue.use(VueAxios, axios)
         appTitle: 'HSK',
         sidebar: false,
         toolbar: false,
-        cart_size: 0,
+        cart_size: 2,
         menuItems: [
           { title: 'ABOUT US', path: '/about', icon: 'face', color: "transparent"}
         ],
@@ -108,8 +108,8 @@ Vue.use(VueAxios, axios)
         window.location.href = loc
       },
       get_cart_size() {
-        var url = "http://0.0.0.0:5001/get_products"
-        axios.get(url)
+        var url = "http://0.0.0.0:5001/get_cart_size"
+        axios.get(url, {withCredentials:true})
           .then((response) => {
             this.cart_size = response.data
           })
@@ -117,6 +117,9 @@ Vue.use(VueAxios, axios)
             alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
         });
       }
+    },
+    beforeMount() {
+      this.get_cart_size()
     }
   }
 </script>

@@ -54,6 +54,54 @@ class Shop():
 			return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
 			return return_string
 
+	@staticmethod
+	def remove_cart_items():
+		new_items = request.get_json()
+		ColorPrint.print_message('Debug', '/add_to_cart', 'Add to cart.')
+
+		if 'cart' not in session.keys():
+			#there's no cart yet
+			ColorPrint.print_message('Debug', '/add_to_cart', 'Cart was not in session.')
+			session['cart'] = []
+
+		cart = session['cart']
+
+		for new_item in new_items:
+			#iterate through new items
+			already_in_cart = False
+			for item in cart:
+				if new_item["name"] == item["name"] and new_item["color"] == item["color"]:
+					already_in_cart = True
+					cart.remove(item)
+		session.modified = True
+		dict_local={'code':200}
+		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+		return return_string
+
+	@staticmethod
+	def edit_cart_item_quantities():
+		new_items = request.get_json()
+		#ColorPrint.print_message('Debug', '/add_to_cart', 'Add to cart.')
+
+		if 'cart' not in session.keys():
+			#there's no cart yet
+			ColorPrint.print_message('Debug', '/add_to_cart', 'Cart was not in session.')
+			session['cart'] = []
+
+		cart = session['cart']
+
+		for new_item in new_items:
+			#iterate through new items
+			already_in_cart = False
+			for item in cart:
+				if new_item["name"] == item["name"] and new_item["color"] == item["color"]:
+					already_in_cart = True
+					item["quantity"] = new_item["quantity"]
+		session.modified = True
+		dict_local={'code':200}
+		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+		return return_string
+
 
 	@staticmethod
 	def get_cart():
@@ -222,4 +270,5 @@ app.add_url_rule('/get_cart', 'get_cart', Shop.get_cart, methods=['GET'])
 app.add_url_rule('/get_cart_size', 'get_cart_size', Shop.get_cart_size, methods=['GET'])
 app.add_url_rule('/add_to_cart', 'add_to_cart', Shop.add_to_cart, methods=['POST'])
 app.add_url_rule('/delete_cart', 'delete_cart', Shop.delete_cart, methods=['POST'])
-
+app.add_url_rule('/edit_cart_item_quantities', 'edit_cart_item_quantities', Shop.edit_cart_item_quantities, methods=['POST'])
+app.add_url_rule('/remove_cart_items', 'remove_cart_items', Shop.remove_cart_items, methods=['POST'])

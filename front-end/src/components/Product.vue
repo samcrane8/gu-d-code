@@ -49,11 +49,11 @@
 				</v-flex> -->
 				<v-layout row class="text-xs-left" style="margin-right:30px;">
 					<v-flex>
-	          <v-btn flat v-on:click="remove_one" :disabled="quantity==1">
+	          <v-btn icon style="margin-right:0px;margin-left:2px;" flat v-on:click="remove_one" :disabled="quantity==1">
 	            <v-icon color="black">remove</v-icon>
 	          </v-btn>
 	          {{quantity}}
-	          <v-btn flat v-on:click="add_one" :disabled="quantity==this.max_qty">
+	          <v-btn icon style="margin-right:0px;margin-left:0px;" flat v-on:click="add_one" :disabled="quantity==this.max_qty">
 	            <v-icon color="black">add</v-icon>
 	          </v-btn>
 	        </v-flex>
@@ -114,7 +114,7 @@ export default {
     	var url = "http://0.0.0.0:5001/add_to_cart"
       axios.post(url,body, {withCredentials:true})
           .then((response) => {
-            alert('success!')
+      			this.$emit('cart_change')
           })
           .catch(error => {
             alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
