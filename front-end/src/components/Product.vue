@@ -49,7 +49,7 @@
 				</v-flex> -->
 				<v-layout row class="text-xs-left" style="margin-right:30px;">
 					<v-flex>
-	          <v-btn flat v-on:click="remove_one" :disabled="quantity==0">
+	          <v-btn flat v-on:click="remove_one" :disabled="quantity==1">
 	            <v-icon color="black">remove</v-icon>
 	          </v-btn>
 	          {{quantity}}

@@ -40,6 +40,20 @@ class Shop():
 		return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
 		return return_string
 
+	@staticmethod
+	def delete_cart():
+		if 'cart' not in session.keys():
+			dict_local = {'code': 31, 'message': "No cart exists anyways."}
+			return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+			return return_string
+		else:
+			#in this situation, the session does have the cart
+			session['cart'] = None
+			session.modified = True
+			dict_local = {'code': 200}
+			return_string = json.dumps(dict_local, sort_keys=True, indent=4, separators=(',', ': '))
+			return return_string
+
 
 	@staticmethod
 	def get_cart():
@@ -78,11 +92,13 @@ class Shop():
 	@staticmethod
 	def get_cart_size():
 		if 'cart' in session.keys():
-			cart = len(session['cart'])
+			cart_size = 0
+			for product in session['cart']:
+				cart_size += product["quantity"]
 		else:
-			cart = 0
+			cart_size = 0
 
-		return_string = json.dumps(cart, sort_keys=True, indent=4, separators=(',', ': '))
+		return_string = json.dumps(cart_size, sort_keys=True, indent=4, separators=(',', ': '))
 		return return_string
 
 	@staticmethod
@@ -205,3 +221,5 @@ app.add_url_rule('/edit_product', 'edit_product', Shop.edit_product, methods=['P
 app.add_url_rule('/get_cart', 'get_cart', Shop.get_cart, methods=['GET'])
 app.add_url_rule('/get_cart_size', 'get_cart_size', Shop.get_cart_size, methods=['GET'])
 app.add_url_rule('/add_to_cart', 'add_to_cart', Shop.add_to_cart, methods=['POST'])
+app.add_url_rule('/delete_cart', 'delete_cart', Shop.delete_cart, methods=['POST'])
+

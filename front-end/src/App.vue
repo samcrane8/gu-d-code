@@ -31,6 +31,12 @@
           :to="item.path">
           <span style="color:black;">{{ item.title }}</span>
         </v-btn>
+        <v-btn
+          flat
+          :color="cart_tile.color"
+          :to="cart_tile.path">
+          <span style="color:black;">{{ cart_tile.title }}({{cart_size}})</span>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main style="background-color:#ffffff; margin-top: 0px; margin-bottom: 50px;">
@@ -81,9 +87,11 @@ Vue.use(VueAxios, axios)
         appTitle: 'HSK',
         sidebar: false,
         toolbar: false,
+        cart_size: 0,
         menuItems: [
-          { title: 'CART', path: '/cart', icon: 'face', color: "transparent"},
+          { title: 'ABOUT US', path: '/about', icon: 'face', color: "transparent"}
         ],
+        cart_tile: { title: 'CART', path: '/cart', icon: 'face', color: "transparent"},
         cart: [
           { name: 'CLASSIC SET', color: 'White', qty: 1}
         ]
@@ -98,6 +106,16 @@ Vue.use(VueAxios, axios)
       },
       goto_external(loc){
         window.location.href = loc
+      },
+      get_cart_size() {
+        var url = "http://0.0.0.0:5001/get_products"
+        axios.get(url)
+          .then((response) => {
+            this.cart_size = response.data
+          })
+          .catch(error => {
+            alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
+        });
       }
     }
   }

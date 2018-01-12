@@ -11,7 +11,7 @@
       </v-layout>
     </section> -->
     <section style="margin-left:30px;margin-right:30px;">
-      <v-flex 
+      <v-flex
         v-for="(item,key) in items"
         :key = key
         class="text-xs-left">
@@ -56,7 +56,7 @@ export default {
         "DUMMY PRODUCT": [
           {
             id: 1,
-            name: "DUMMY PRODUCT",
+            name: "LOADING...",
             image: "static/PBD_Linens-58.jpg",
             price: "95",
             max_qty: 20,
