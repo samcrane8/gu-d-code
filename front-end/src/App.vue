@@ -41,7 +41,7 @@
     </v-toolbar>
     <main style="background-color:#ffffff; margin-top: 0px; margin-bottom: 50px;">
       <v-container pa-0 fluid>
-        <router-view v-on:set_toolbar="set_toolbar" v-on:cart_change="get_cart_size"></router-view>
+        <router-view v-on:set_toolbar="set_toolbar" v-on:cart_change="cart_change" v-on:added_to_cart="added_to_cart"></router-view>
       </v-container>
     </main>
     <span style="background-color:white;">
@@ -58,7 +58,6 @@
           <v-flex class="text-xs-left">
             <p> HELP </p>
             <span style="cursor:pointer" @click="goto('support')"> Support </span><br>
-
           </v-flex>
         </v-layout>
       </section>
@@ -70,6 +69,18 @@
         <div>&copy; {{ new Date().getFullYear() }}</div>
       </v-footer>
     </span>
+    <v-snackbar
+      :timeout="timeout"
+      top
+      color = "white"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      <v-flex class="text-xs-center">
+        <span style="color:black;"> Added to cart! </span>
+      </v-flex>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -84,6 +95,9 @@ Vue.use(VueAxios, axios)
   export default {
     data () {
       return {
+        snackbar: false,
+        mode: '',
+        timeout: 3000,
         appTitle: 'HSK',
         sidebar: false,
         toolbar: false,
@@ -107,7 +121,18 @@ Vue.use(VueAxios, axios)
       goto_external(loc){
         window.location.href = loc
       },
-      get_cart_size() {
+      added_to_cart() {
+        var url = "http://0.0.0.0:5001/get_cart_size"
+        axios.get(url, {withCredentials:true})
+          .then((response) => {
+            this.cart_size = response.data
+            this.snackbar = true
+          })
+          .catch(error => {
+            alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
+        });
+      },
+      cart_change() {
         var url = "http://0.0.0.0:5001/get_cart_size"
         axios.get(url, {withCredentials:true})
           .then((response) => {
@@ -119,7 +144,7 @@ Vue.use(VueAxios, axios)
       }
     },
     beforeMount() {
-      this.get_cart_size()
+      this.cart_change()
     }
   }
 </script>

@@ -3,7 +3,7 @@
   	<section style="margin-left:30px;margin-right:30px;">
 	    <v-layout v-if="this.cart.length === 0" row wrap>
 	      <v-flex class="text-xs-center">
-	        <h1> CART IS EMPTY </h1>
+	        <h4> Hmm... nothing here yet! </h4>
 	      </v-flex>
 	    </v-layout>
 	    <v-layout row wrap v-if="!(this.cart.length === 0)" style="margin-top:80px;">

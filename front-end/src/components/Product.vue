@@ -114,7 +114,7 @@ export default {
     	var url = "http://0.0.0.0:5001/add_to_cart"
       axios.post(url,body, {withCredentials:true})
           .then((response) => {
-      			this.$emit('cart_change')
+      			this.$emit('added_to_cart')
           })
           .catch(error => {
             alert('Hmmm something went wrong with our servers when fetching stations!! Sorry!')
