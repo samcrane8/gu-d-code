@@ -9,8 +9,8 @@ import datetime
 import mailchimp
 from mailchimp import ListAlreadySubscribedError
 
-API_KEY = "94a8d8be7ab3ccea22c02040be37a978-us17"
-LIST_ID = 'df86122232' 
+API_KEY = "FAKE KEY"
+LIST_ID = 'LIST ID' 
 
 api = mailchimp.Mailchimp(API_KEY)
 
